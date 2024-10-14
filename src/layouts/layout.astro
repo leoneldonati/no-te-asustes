@@ -1,0 +1,54 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import bgVideo from "/bg-video.mp4";
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg" />
+    <title>{title}</title>
+
+    <ViewTransitions fallback="none" />
+
+    <style>
+      @font-face {
+        font-family: "Primary";
+        src: url("/fonts/Principal.ttf");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Secondary";
+        src: url("/fonts/Secondary.ttf");
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-black to-slate-900 text-white">
+    <main class="relative min-h-screen w-full overflow-hidden">
+      <div class="blur-xl bg-black/20">
+        <video
+          src={bgVideo}
+          autoplay
+          muted
+          loop
+          class="absolute -z-10 pointer-events-none opacity-10 aspect-video object-cover w-full"
+        ></video>
+      </div>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  .secondary {
+    font-family: "Secondary";
+  }
+</style>

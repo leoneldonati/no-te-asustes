@@ -1,0 +1,13 @@
+---
+interface Props {
+  tag: 'h1' | 'h2';
+}
+
+const { tag } = Astro.props;
+---
+{
+  tag === 'h1' && <h1 transition:name="title" class="text-[6em] text-center font-bold font-primary bg-clip-text text-transparent bg-gradient-to-tl from-red-700 via-red-400 to-green-700 contrast-125"><slot/></h1>
+}
+{
+  tag === 'h2' && <h2 transition:name="title" class="text-[5em] text-center font-bold font-primary bg-clip-text text-transparent bg-gradient-to-tl from-red-700 via-red-400 to-green-700 contrast-125"><slot/></h2>
+}

@@ -1,0 +1,10 @@
+---
+import { IconArrowBackUp } from "@tabler/icons-react";
+
+const referer = Astro.request.headers.get("referer") ?? "";
+const previousPath = new URL(referer).pathname;
+---
+
+<a href={previousPath} data-astro-prefetch="false" class="absolute top-10 left-0" title="Ir hacia atrás">
+  <IconArrowBackUp />
+</a>

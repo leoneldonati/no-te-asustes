@@ -1,0 +1,115 @@
+---
+import Layout from "../layouts/layout.astro";
+import Title from "../components/title.astro";
+import { IconArrowBackUp, IconPhotoDown } from "@tabler/icons-react";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
+import GoBackBtn from "../components/go-back-btn.astro";
+import Spinner from "../components/spinner.astro";
+const publicId = Astro.url.searchParams.get("id");
+const prompt = Astro.url.searchParams.get("prompt");
+
+if (!publicId || !prompt) return Astro.redirect("/");
+
+const { decodedId, decodedPrompt } = {
+  decodedPrompt: decodeURIComponent(prompt),
+  decodedId: decodeURIComponent(publicId),
+};
+
+const url = getCldImageUrl({
+  src: decodedId,
+  replaceBackground: decodedPrompt,
+  fillBackground: true,
+  crop: "pad",
+});
+---
+
+<Layout title="¡Excelente foto! Descárgala 🎃">
+  <section class="min-h-screen max-w-[900px] mx-auto relative p-2">
+    <Title tag="h2"> Wow! Escalofriante! </Title>
+
+    <GoBackBtn />
+
+    <article class="relative">
+      <img
+        src={url}
+        alt="Foto de un usuario espeluznante"
+        class="aspect-video object-contain mx-auto w-full rounded-md"
+        id="image"
+        loading="lazy"
+      />
+
+      <div
+        class="flex flex-row gap-2 items-center absolute -z-10 inset-0 m-auto w-fit"
+      >
+        <Spinner />
+
+        <strong>Generando imagen...</strong>
+      </div>
+    </article>
+
+    <button
+      id="download-btn"
+      class="flex items-center gap-2 py-2 px-4 mt-5 mx-auto bg-green-500/70 rounded-md shadow-md shadow-transparent transition hover:shadow-green-600/90 hover:scale-[.97]"
+      title="Descarga la imagen"
+      ><IconPhotoDown /><span id="inner-btn">Descargar imagen</span></button
+    >
+  </section>
+</Layout>
+
+<script>
+  const $image = document.querySelector("#image") as HTMLImageElement;
+
+  const $downloadBtn = document.querySelector(
+    "#download-btn"
+  ) as HTMLButtonElement;
+
+  const $innerBtnText = document.querySelector("#inner-btn") as HTMLElement;
+
+  $image.addEventListener("loadstart", () => {
+    $downloadBtn.style.opacity = ".8";
+    $downloadBtn.style.pointerEvents = "none";
+  });
+  $image.addEventListener("load", () => {
+    $downloadBtn.style.opacity = "1";
+    $downloadBtn.style.pointerEvents = "auto";
+  });
+
+  let downloads = 0;
+
+  if ($image && $downloadBtn) {
+    async function downloadPhoto() {
+      $downloadBtn.style.pointerEvents = "none";
+      $innerBtnText.innerText = "Descargando...";
+      $downloadBtn.style.opacity = ".8";
+      const src = $image.src;
+
+      try {
+        const res = await fetch(src);
+
+        const blob = await res.blob();
+
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = blobUrl;
+
+        link.download = `imagen-espeluznante-${downloads}.jpg`;
+
+        link.click();
+
+        URL.revokeObjectURL(blobUrl);
+
+        downloads++;
+      } catch (e) {
+        console.error(e);
+        downloads--;
+      } finally {
+        $downloadBtn.style.pointerEvents = "auto";
+        $innerBtnText.innerText = "Descargar imagen";
+        $downloadBtn.style.opacity = "1";
+      }
+    }
+    $downloadBtn.addEventListener("click", downloadPhoto);
+  }
+</script>

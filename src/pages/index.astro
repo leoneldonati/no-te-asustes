@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/layout.astro";
+import Uploader from "../components/uploader";
+import Title from "../components/title.astro";
+---
+
+<Layout title="No te asustes 🎃">
+  <section class="min-h-screen text-center relative">
+    <Title tag="h1">Trata de no asustarte..</Title>
+
+    <Uploader client:visible />
+  </section>
+</Layout>
