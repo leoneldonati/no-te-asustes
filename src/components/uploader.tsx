@@ -48,7 +48,7 @@ export default function Uploader() {
       </span>
       <label
         htmlFor="preset"
-        className="relative flex justify-center items-center w-full h-full cursor-pointer border border-red-600 shadow-inner shadow-transparent rounded-md transition hover:shadow-red-500"
+        className="relative flex justify-center items-center w-full h-full cursor-pointer border border-red-600 shadow-inner shadow-transparent overflow-hidden rounded-md transition hover:shadow-red-500"
         title="Selecciona una foto tuya"
       >
         <input
