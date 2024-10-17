@@ -21,7 +21,7 @@ export default function Uploader() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/upload", {
+      const res = await fetch(`/api/upload?prompt=${prompt}`, {
         method: "POST",
         body: asset,
       });
@@ -30,7 +30,7 @@ export default function Uploader() {
         const data = await res.json();
 
         return navigate(
-          `/start?id=${encodeURIComponent(data.publicId)}&prompt=${encodeURIComponent(prompt !== '' ? prompt : 'A spooky bakground with halloween tematic')}`
+          `/start?id=${encodeURIComponent(data.publicId)}&prompt=${encodeURIComponent(prompt)}`
         );
       }
 

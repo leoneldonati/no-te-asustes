@@ -45,3 +45,18 @@ export async function uploadStream(buffer: Buffer) {
     };
   }
 }
+
+export function replaceBg(
+  publicId: string,
+  { effect }: { effect: string }
+) {
+  try {
+     const isMatched = cloudinary.image(publicId, { effect }).match(/src=['"]([^'"]*)['"]/);
+
+     if (isMatched) return isMatched[1]
+
+     return null
+  } catch (err) {
+    return null
+  }
+}

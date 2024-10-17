@@ -1,26 +1,16 @@
 ---
 import Layout from "../layouts/layout.astro";
 import Title from "../components/title.astro";
-import { IconArrowBackUp, IconPhotoDown } from "@tabler/icons-react";
-import { getCldImageUrl } from "astro-cloudinary/helpers";
+import { IconPhotoDown } from "@tabler/icons-react";
 import GoBackBtn from "../components/go-back-btn.astro";
 import Spinner from "../components/spinner.astro";
-const publicId = Astro.url.searchParams.get("id");
+import { CldImage } from "astro-cloudinary";
+const id = Astro.url.searchParams.get("id");
 const prompt = Astro.url.searchParams.get("prompt");
 
-if (!publicId || !prompt) return Astro.redirect("/");
+if (!id) return Astro.redirect("/");
 
-const { decodedId, decodedPrompt } = {
-  decodedPrompt: decodeURIComponent(prompt),
-  decodedId: decodeURIComponent(publicId),
-};
-
-const url = getCldImageUrl({
-  src: decodedId,
-  replaceBackground: decodedPrompt,
-  fillBackground: true,
-  crop: "pad",
-});
+const decodedId = decodeURIComponent(id);
 ---
 
 <Layout title="¡Excelente foto! Descárgala 🎃">
@@ -30,10 +20,13 @@ const url = getCldImageUrl({
     <GoBackBtn />
 
     <article class="relative">
-      <img
-        src={url}
+      <CldImage
+        src={decodedId}
         alt="Foto de un usuario espeluznante"
-        class="aspect-video object-contain mx-auto w-full rounded-md"
+        class="rounded-md max-w-[500px] mx-auto"
+        replaceBackground={prompt
+          ? prompt
+          : "Spooky background with halloween tematic"}
         id="image"
         loading="lazy"
       />
